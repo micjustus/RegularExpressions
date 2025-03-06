@@ -43,18 +43,18 @@ namespace RegularExpressions
             string[] suffixes = [ "_end", "_test", "_v2", "_final", "" ];
 
             string pattern = @$"(?=.*(?<subject>{pattern1}|{pattern2}))(?=.*(?<period>{pattern3}|{pattern4})).*\.csv$";
+            var regex = new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-            var randP = new Random();
-            var randS = new Random();
-
+            var rand = new Random();
+            
             foreach (string input in testInputs)
             {
-                var idxP = randP.Next(prefixes.Length - 1);
-                var idxS = randS.Next(suffixes.Length - 1);
+                var idxP = prefixes[rand.Next(prefixes.Length)];
+                var idxS = suffixes[rand.Next(suffixes.Length)];
 
-                var test = $"{prefixes[idxP]}{input}{suffixes[idxS]}.csv";
+                var test = $"{idxP}{input}{idxS}.csv";
 
-                Match match = Regex.Match(test, pattern, RegexOptions.IgnoreCase);
+                var match = regex.Match(test);
                 if (match.Success)
                 {
                     var subject = match.Groups["subject"].Value;
